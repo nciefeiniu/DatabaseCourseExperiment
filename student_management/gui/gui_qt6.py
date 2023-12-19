@@ -17,21 +17,39 @@ class MainWindow(QWidget):
 
         self.tabStudentInfo = QWidget()  # 新生入学信息增加，学生信息修改。
         self.tabStudentInfo.layout = QVBoxLayout(self.tabStudentInfo)
+        #按钮
         self.btnStudentInsert = QPushButton("新生入学信息增加",self)
         self.btnStudentInsert.clicked.connect(lambda:button_events.InsertStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.editScholarship.text()) )
+        self.btnStudentUpdate = QPushButton("学生信息修改",self)
+        self.btnStudentUpdate.clicked.connect(lambda:button_events.UpdateStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.editScholarship.text()) )
+        #文本框
         self.editSname = QLineEdit(self)
         self.editSno = QLineEdit(self)
         self.editSsex = QLineEdit(self)
         self.editSage = QLineEdit(self)
         self.editSdept = QLineEdit(self)
         self.editScholarship = QLineEdit(self)
+        #标签
+        self.labelSname = QLabel("姓名",self)
+        self.labelSno = QLabel("学号",self)
+        self.labelSsex = QLabel("性别",self)
+        self.labelSage = QLabel("年龄",self)
+        self.labelSdept = QLabel("专业",self)
+        self.labelScholarship = QLabel("奖学金",self)
         #设置布局
         self.tabStudentInfo.layout.addWidget(self.btnStudentInsert)
+        self.tabStudentInfo.layout.addWidget(self.btnStudentUpdate)
+        self.tabStudentInfo.layout.addWidget(self.labelSname)
         self.tabStudentInfo.layout.addWidget(self.editSname)
+        self.tabStudentInfo.layout.addWidget(self.labelSno)
         self.tabStudentInfo.layout.addWidget(self.editSno)
+        self.tabStudentInfo.layout.addWidget(self.labelSsex)
         self.tabStudentInfo.layout.addWidget(self.editSsex)
+        self.tabStudentInfo.layout.addWidget(self.labelSage)
         self.tabStudentInfo.layout.addWidget(self.editSage)
+        self.tabStudentInfo.layout.addWidget(self.labelSdept)
         self.tabStudentInfo.layout.addWidget(self.editSdept)
+        self.tabStudentInfo.layout.addWidget(self.labelScholarship)
         self.tabStudentInfo.layout.addWidget(self.editScholarship)
 
         self.tabWidget.addTab(self.tabStudentInfo, "Tab 1")  # 添加第一个选项卡
