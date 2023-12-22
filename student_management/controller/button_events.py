@@ -31,15 +31,15 @@ def UpdateSCInfo(Sno, Cno, Grade):
     sc = SC(Sno, Cno, Grade)
     SCInfoFunc.UpdateSC(sc)
 
-def GetScStastic():
+def GetScStastic(Sdept):
     # 获取与成绩有关的统计数据
-    resAverMaxMin = ScStasticfunc.GetAverMaxMinBySdept()
-    resExcel = ScStasticfunc.GetScExcellentRateBySdept()
-    resFail = ScStasticfunc.GetScFailNumBySdept()
+    resAverMaxMin = ScStasticfunc.GetAverMaxMinBySdept(Sdept)
+    resExcel = ScStasticfunc.GetScExcellentRateBySdept(Sdept)
+    resFail = ScStasticfunc.GetScFailNumBySdept(Sdept)
 
 def GetSortedStudentListByDept(Sdept):
-    res = SortFunction.SortStudentInSameSdept()
+    res = SortFunction.SortStudentInSameSdept(Sdept)
 
-def GetStudentBasicInfo():
-    resBasicInfo = StudentInfoQueryFunc.GetStudentInfoBySno()
-    resCourseInfo = StudentInfoQueryFunc.GetStudentCourseInfoBySno()
+def GetStudentBasicInfo(Sno):
+    resBasicInfo = StudentInfoQueryFunc.GetStudentInfoBySno(Sno)
+    resCourseInfo = StudentInfoQueryFunc.GetStudentCourseInfoBySno(Sno)

@@ -72,7 +72,7 @@ class ScStasticfunc(object):
         sql = "select count(*) from sc,student where sc.Sno = student.Sno and Sdept = \'%s\'" % Sdept
         print(sql)
         cntTotal = ExecSql().get_all(sql=sql)
-        return cntExccel[0][0]/cntTotal[0][0]
+        return cntExccel[0]['count(*)']/cntTotal[0]['count(*)']
     def GetScFailNumBySdept(Sdept):
         #先获取不及格人数，再除以总人数
         sql = "select count(*) from sc,student where sc.Sno = student.Sno and Sdept = \'%s\' and Grade < 60" % Sdept
@@ -81,7 +81,7 @@ class ScStasticfunc(object):
         sql = "select count(*) from sc,student where sc.Sno = student.Sno and Sdept = \'%s\'" % Sdept
         print(sql)
         cntTotal = ExecSql().get_all(sql=sql)
-        return cntFail[0][0]/cntTotal[0][0]
+        return cntFail[0]['count(*)']/cntTotal[0]['count(*)']
     
 class SortFunction(object):
     #按系对学生成绩进行排名
