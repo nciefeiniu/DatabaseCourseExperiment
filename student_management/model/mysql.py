@@ -30,8 +30,14 @@ def InitMysql():
     global conn, cursor
     conn = pymysql.connect(host='localhost', port=3306, user='test', password='test', database='test',charset='utf8')
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    initTables()
     print("数据库连接成功")
-    sql = """
+    #初始化完毕
+    print("初始化完毕")
+
+
+def initTables():
+    sqlStudent = """
         CREATE TABLE IF NOT EXISTS student(
             Sno CHAR(20) NOT NULL,
             Sname CHAR(20),
@@ -42,9 +48,26 @@ def InitMysql():
             PRIMARY KEY (Sno)
         )
         """
-    cursor.execute(sql)
+    sqlCourse = """
+        CREATE TABLE IF NOT EXISTS course(
+            Cno CHAR(20) NOT NULL,
+            Cname CHAR(20),
+            Cpno CHAR(20),
+            Ccredit INT,
+            PRIMARY KEY (Cno)
+        )
+        """
+    sqlSC = """
+        CREATE TABLE IF NOT EXISTS sc(
+            Sno CHAR(20) NOT NULL,
+            Cno CHAR(20) NOT NULL,
+            Grade INT,
+            PRIMARY KEY (Sno,Cno),
+            FOREIGN KEY (Sno) REFERENCES student(Sno),
+            FOREIGN KEY (Cno) REFERENCES course(Cno)
+        )
+        """
+    cursor.execute(sqlStudent)
+    cursor.execute(sqlCourse)
+    cursor.execute(sqlSC)
     conn.commit()
-    #初始化完毕
-    print("初始化完毕")
-
-
