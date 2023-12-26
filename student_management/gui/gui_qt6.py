@@ -1,29 +1,36 @@
-from PyQt6.QtWidgets import QWidget,QPushButton,QVBoxLayout,QTabWidget,QLabel,QLineEdit
+from PyQt6.QtWidgets import QWidget,QPushButton,QVBoxLayout,QTabWidget,QLabel,QLineEdit,QTextEdit,QComboBox
 from controller import button_events
-
-
+from util.log_util import SetConsoleLogTarget,SetOutputLogTarget
 
 
 class MainWindow(QWidget):
+    
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
+        #日志输出
+        self.textLogEditWidget = QTextEdit(self)
+        self.textOutputEditWidget = QTextEdit(self)
+        SetConsoleLogTarget(self.textLogEditWidget)
+        SetOutputLogTarget(self.textOutputEditWidget)
         self.setGeometry(300, 300, 1000,800)  # 设置窗口的位置和大小
         self.setWindowTitle('学生管理系统')  # 设置窗口的标题
 
         # 选项卡初始化
         self.tabWidget = QTabWidget(self)  # 创建一个选项卡控件
-
         self.tabStudentInfo = QWidget()  # 新生入学信息增加，学生信息修改。
         self.tabStudentInfo.layout = QVBoxLayout(self.tabStudentInfo)
         #按钮
+        # 数据库
+        self.btnSqlConnect = QPushButton("连接数据库")
+        self.btnSqlConnect.clicked.connect(lambda:button_events.ConnectDb(self.editDbHost.text(), int(self.editDbPort.text()), self.editDbUser.text(), self.editDbPassword.text(), self.editDbName.text()) )
         #学生管理
         self.btnStudentInsert = QPushButton("新生入学信息增加",self)
-        self.btnStudentInsert.clicked.connect(lambda:button_events.InsertStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.editScholarship.text()) )
+        self.btnStudentInsert.clicked.connect(lambda:button_events.InsertStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.comboScholarship.currentText()) )
         self.btnStudentUpdate = QPushButton("学生信息修改",self)
-        self.btnStudentUpdate.clicked.connect(lambda:button_events.UpdateStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.editScholarship.text()) )
+        self.btnStudentUpdate.clicked.connect(lambda:button_events.UpdateStudentInfo(self.editSno.text(), self.editSname.text(), self.editSsex.text(), self.editSage.text(), self.editSdept.text(),self.comboScholarship.currentText()) )
         #课程信息维护
         self.btnAddCourse = QPushButton("新增课程",self)
         self.btnUpdateCourse = QPushButton("修改课程",self)
@@ -43,14 +50,23 @@ class MainWindow(QWidget):
         self.btnQueryStudentInfo = QPushButton("学生信息查询",self)
         self.btnQueryStudentInfo.clicked.connect(lambda:button_events.GetStudentBasicInfo(self.editQuerySno.text()) )
 
-        #文本框
+        #文本框/下拉框
+        ## 数据库
+        self.editDbHost = QLineEdit(self)
+        self.editDbPort = QLineEdit(self)
+        self.editDbUser = QLineEdit(self)
+        self.editDbPassword = QLineEdit(self,echoMode=QLineEdit.EchoMode.Password)
+        self.editDbName = QLineEdit(self)
         ## 学生管理
         self.editSname = QLineEdit(self)
         self.editSno = QLineEdit(self)
         self.editSsex = QLineEdit(self)
         self.editSage = QLineEdit(self)
         self.editSdept = QLineEdit(self)
-        self.editScholarship = QLineEdit(self)
+        #editScholarship是下拉框
+        self.comboScholarship = QComboBox(self)
+        self.comboScholarship.addItem("否")
+        self.comboScholarship.addItem("是")
         ## 课程信息维护
         self.editCno = QLineEdit(self)
         self.editCname = QLineEdit(self)
@@ -66,6 +82,12 @@ class MainWindow(QWidget):
         self.editQuerySno = QLineEdit(self)
 
         #标签
+        ## 数据库
+        self.labelDbHost = QLabel("主机",self)
+        self.labelDbPort = QLabel("端口",self)
+        self.labelDbUser = QLabel("用户名",self)
+        self.labelDbPassword = QLabel("密码",self)
+        self.labelDbName = QLabel("数据库名",self)
         ##学生管理
         self.labelSname = QLabel("姓名",self)
         self.labelSno = QLabel("学号",self)
@@ -89,6 +111,21 @@ class MainWindow(QWidget):
 
         
         #设置布局
+        #数据库
+        self.tabDb = QWidget()
+        self.tabDb.layout = QVBoxLayout(self.tabDb)
+        self.tabDb.layout.addWidget(self.btnSqlConnect)
+        self.tabDb.layout.addWidget(self.labelDbHost)
+        self.tabDb.layout.addWidget(self.editDbHost)
+        self.tabDb.layout.addWidget(self.labelDbPort)
+        self.tabDb.layout.addWidget(self.editDbPort)
+        self.tabDb.layout.addWidget(self.labelDbUser)
+        self.tabDb.layout.addWidget(self.editDbUser)
+        self.tabDb.layout.addWidget(self.labelDbPassword)
+        self.tabDb.layout.addWidget(self.editDbPassword)
+        self.tabDb.layout.addWidget(self.labelDbName)
+        self.tabDb.layout.addWidget(self.editDbName)
+        self.tabWidget.addTab(self.tabDb, "数据库")  # 添加第一个选项卡
         #学生管理
         self.tabStudentInfo.layout.addWidget(self.btnStudentInsert)
         self.tabStudentInfo.layout.addWidget(self.btnStudentUpdate)
@@ -103,7 +140,7 @@ class MainWindow(QWidget):
         self.tabStudentInfo.layout.addWidget(self.labelSdept)
         self.tabStudentInfo.layout.addWidget(self.editSdept)
         self.tabStudentInfo.layout.addWidget(self.labelScholarship)
-        self.tabStudentInfo.layout.addWidget(self.editScholarship)
+        self.tabStudentInfo.layout.addWidget(self.comboScholarship)
         self.tabWidget.addTab(self.tabStudentInfo, "学生信息管理")  # 添加第一个选项卡
 
         #课程信息维护
@@ -153,3 +190,5 @@ class MainWindow(QWidget):
 
         layout = QVBoxLayout(self)  # 创建一个垂直布局
         layout.addWidget(self.tabWidget)  # 将tab组件添加到布局中
+        layout.addWidget(self.textLogEditWidget) #将日志输出添加到布局中
+        layout.addWidget(self.textOutputEditWidget) #将查询结果输出添加到布局中

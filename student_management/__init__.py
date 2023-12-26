@@ -8,5 +8,4 @@ def main():
     app.exec()  # 进入应用程序的主循环
 
 if __name__ == '__main__':
-    model.mysql.InitMysql()
     main()
