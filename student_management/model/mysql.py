@@ -5,13 +5,15 @@ conn = None
 
 from util.log_util import WriteConsoleLog
 
+
 class ExecSql(object):
     global cursor
+
     def run_command(self, sql, args=None):
         cursor.execute(sql, args)
         conn.commit()
         return cursor.lastrowid
-    
+
     def close(self):
         cursor.close()
         conn.close()
@@ -24,13 +26,11 @@ class ExecSql(object):
         cursor.execute(sql, args)
         return cursor.fetchall()
 
-        
-
 
 def InitMysql(host, port, user, password, database):
     try:
         global conn, cursor
-        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database,charset='utf8')
+        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=database, charset='utf8')
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         initTables()
         initRules()
@@ -69,12 +69,13 @@ def initTables():
             FOREIGN KEY (Cno) REFERENCES course(Cno)
         )
         """
-    
+
     cursor.execute(sqlStudent)
     cursor.execute(sqlCourse)
     cursor.execute(sqlSC)
     conn.commit()
     WriteConsoleLog("数据库表初始化完毕")
+
 
 def initRules():
     try:
@@ -105,6 +106,7 @@ def initRules():
         print(e)
         WriteConsoleLog("初始化规则失败，请参考README.md；数据库表初始化成功的情况下，您仍可对数据库进行操作")
 
+
 def constraint_exists(table_name, constraint_name):
     cursor.execute("""
         SELECT COUNT(*)
@@ -115,6 +117,7 @@ def constraint_exists(table_name, constraint_name):
     """, (table_name, constraint_name))
     res = cursor.fetchone()
     return res['COUNT(*)'] == 1
+
 
 def trigger_exists(trigger_name):
     cursor.execute("""
